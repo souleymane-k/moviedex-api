@@ -13,9 +13,6 @@ app.use(morgan('dev'))
 app.use(helmet())
 app.use(cors())
 
-// app.use((req, res) => {
-//   res.send('Hello, world!')
-// })
 app.use(function validateBearerToken(req, res, next){
     //const bearerToken = req.get('Authorization').split(' ')[1]
     const apiToken = process.env.API_TOKEN
@@ -31,9 +28,6 @@ app.use(function validateBearerToken(req, res, next){
 })
 
 
-
-
-
 app.get('/movie', function handleMovie(req, res){
     let response = MOVIEDEX.movie
     // filter movie by genre if genre query param is present
@@ -43,12 +37,16 @@ app.get('/movie', function handleMovie(req, res){
             .genre.toLowerCase()
             .includes(req.query.genre.toLowerCase()))
     }
+
+    // filter movie by country if country query param is present
     if(req.query.country){
         response = response.filter(movie =>
             movie
             .country.toLowerCase()
             .includes(req.query.country.toLowerCase()))
     }
+
+    // filter movie by avg_vote if avg_vote query param is present
     if(req.query.avg_vote){
         response = response.filter(movie =>
             Number(movie.avg_vote) == Number(req.query.avg_vote))

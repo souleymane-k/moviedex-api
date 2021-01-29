@@ -18,7 +18,7 @@ app.use(function validateBearerToken(req, res, next){
     const apiToken = process.env.API_TOKEN
     const authToken = req.get('Authorization')
     console.log('validate bearer token middleware')
-    
+    debugger
     if(!authToken || authToken.split(' ')[1] !== apiToken ){
         return res.status(401).json({error:'Unauthorized request'})
     }
@@ -29,8 +29,8 @@ app.use(function validateBearerToken(req, res, next){
 
 
 app.get('/movie', function handleMovie(req, res){
-    let response = MOVIEDEX.movie
-    // filter movie by genre if genre query param is present
+    let response = MOVIEDEX
+    // // filter movie by genre if genre query param is present
     if(req.query.genre){
         response = response.filter(movie =>
             movie
@@ -49,7 +49,7 @@ app.get('/movie', function handleMovie(req, res){
     // filter movie by avg_vote if avg_vote query param is present
     if(req.query.avg_vote){
         response = response.filter(movie =>
-            Number(movie.avg_vote) == Number(req.query.avg_vote))
+            Number(movie.avg_vote) >= Number(req.query.avg_vote))
     }
     res.json(response)
 })
